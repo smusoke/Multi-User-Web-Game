@@ -9,7 +9,5 @@ meteor create webgame
 
 Run meteor
 
-cd webgame
-meteor npm install
-meteor
+cd webgame<br>meteor npm install<br>meteor
 
