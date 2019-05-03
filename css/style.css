@@ -1,0 +1,32 @@
+#main-container{
+  margin-top: 6px;
+}
+#titleHeading{
+  margin-left: 37%;
+  margin-top: 2rem;
+}
+  
+#navlist a:link{
+  text-decoration: none;
+}
+
+#nav{
+  background: #565151;
+  list-style-type: none;
+  height: 6vh;
+  min-height: 30px;
+  border-radius: 6px;
+}
+
+#nav a{
+  text-align: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: .8%;
+  font-size: 90%;
+  text-decoration: none;
+}
+
+form{
+  margin-top: 3vh;
+}
