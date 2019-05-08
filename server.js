@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path')
 const sqlite3 = require('sqlite3');
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const uuid = require('uuid/v4')
 
 
 const app = express()
@@ -15,6 +17,34 @@ var public_dir = path.join(__dirname, 'public');
 app.use(express.static(public_dir));
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(cookieParser());
+
+
+
+// set a cookie
+app.use( function(req, res, next) {
+
+  // check if client sent cookie
+  var cookie = req.cookies.cookieName;
+
+  if (cookie === undefined)
+  {
+    // set a new cookie
+    var random = uuid()
+    res.cookie('cookieName',random, { maxAge: 900000, httpOnly: true });
+    console.log('cookie created successfully: ' + random);
+
+  } 
+  else
+  {
+    // yes, cookie was already present 
+    console.log('cookie exists', cookie);
+  } 
+
+  next();
+});
+
+
 
 
 //Establish db
@@ -38,7 +68,6 @@ app.get('/', (req, res) => {
 	                res.writeHead(200, { 'Content-Type': 'text/html' });
 	                res.write(pgResp);
 	            }
-	             
 	            res.end();
 	        });
 });
@@ -49,6 +78,10 @@ app.post('/login', function (req, res) {
     //console.log(res);
     console.log(req.body.username);
     console.log(req.body.password);
+
+    /*
+		-Check submission
+		*/
 });
 
 
