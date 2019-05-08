@@ -31,7 +31,7 @@ app.use( function(req, res, next) {
   {
     // set a new cookie
     var random = uuid()
-    res.cookie('cookieName',random, { maxAge: 900000, httpOnly: true });
+    res.cookie('cookieName',random, {expire : new Date() + 9999});
     console.log('cookie created successfully: ' + random);
 
   } 
