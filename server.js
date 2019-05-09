@@ -57,6 +57,13 @@ var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READONLY, (err) => {
     }
 });
 
+
+//Registering a user
+function register(username,password)
+{
+	//Check if user already in database
+}
+
 //Index page
 app.get('/', (req, res) => {
 
@@ -74,6 +81,18 @@ app.get('/', (req, res) => {
 
 
 app.post('/login', function (req, res) {
+    //res.send('POST Request');
+    //console.log(res);
+    console.log(req.body.username);
+    console.log(req.body.password);
+
+    /*
+		-Check submission
+		*/
+});
+
+
+app.post('/register', function (req, res) {
     //res.send('POST Request');
     //console.log(res);
     console.log(req.body.username);

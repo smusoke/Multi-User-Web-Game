@@ -13,7 +13,9 @@
 	<!-- FONT
 	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
 	<link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script type="text/javascript" src="script.js" async=""></script>
+	<script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
 	
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/skeleton.css">
@@ -23,17 +25,52 @@
 
 
 
-<body style="background-color:#EEE;">
+<body style="background-color:#EEE;" onload="Init()">
 
+<div id="app">
 
 <div class="nav section">
 	<div class="container" >  
 		<div class="row" id="nav" style="margin-top: 3px;">
-			<a class="three columns" href="/" style="color:white">Play Now</a>
+			<p class="three columns" onclick="showGame()" style="color:white">Play Now</p>
 		</div>
 	</div>
 </div>
 
+
+<div id="main">
+
+
+
+<div class="register section">
+	<div class="container" > 
+		<button class="u-pull-right" onclick="showPopup()">Register</button>
+		
+	</div>
+</div>
+
+<div id="popup" style="display: none;">
+		<button onclick="closePopup()">Close</button>
+
+		<h2 style="display: center;">Register</h2>
+		
+		    <div class="offset-by-three six columns">
+		      <label for="username">Username</label>
+		      <input class="u-full-width" name="username" type="text" v-model="username" placeholder="AlienSlayer" id="usernameInput">
+		    </div>
+		    <div class="offset-by-three six columns">
+		      <label for="password">Password</label>
+		      <input class="u-full-width" name="password" type="password" type="text" v-model="password" placeholder="Password" id="passwordInput">
+		      </select>
+		    </div>
+
+		    <div class="offset-by-four four columns" v-bind:style="text_color">{{register_status}}</div>
+
+
+		  <div class="twelve columns" style="text-align: center;">
+		  	<button @click="register" class="button-primary">Submit</button> 
+		  </div>
+</div>
 
 
 <div class="heading section">
@@ -64,6 +101,7 @@
 	</div>
 </div>
 
+</div>
 
 <div class="footer section">
 	<div class="container" >  
@@ -75,7 +113,7 @@
 
 
 
-	
+</div>
 
 </body>
 </html>

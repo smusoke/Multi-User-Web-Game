@@ -18,7 +18,7 @@
   border-radius: 6px;
 }
 
-#nav a{
+#nav p{
   text-align: center;
   padding-left: 5%;
   padding-right: 5%;
@@ -26,6 +26,27 @@
   font-size: 90%;
   text-decoration: none;
 }
+
+#popup{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background-color: white;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+    opacity: 0.98;
+    display: none;
+  
+
+    min-width: 99%;
+    min-height: 100vh;
+    display: block;
+    text-align:center
+}
+
+
+
+
 
 form{
   margin-top: 3vh;
