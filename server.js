@@ -29,11 +29,7 @@ app.use( function(req, res, next) {
 
   if (cookie === undefined)
   {
-    // set a new cookie
-    var random = uuid()
-    res.cookie('cookieName',random, {expire : new Date() + 9999});
-    console.log('cookie created successfully: ' + random);
-
+    console.log("No cookie");
   } 
   else
   {
@@ -48,7 +44,8 @@ app.use( function(req, res, next) {
 
 
 //Establish db
-var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READONLY, (err) => {
+// CREATE TABLE users (username TEXT PRIMARY KEY, password TEXT, uuid UNIQUE);
+var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
         console.log('Error opening ' + db_filename);
     }
@@ -58,11 +55,21 @@ var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READONLY, (err) => {
 });
 
 
-//Registering a user
-function register(username,password)
-{
-	//Check if user already in database
+
+//Insert a username and pass
+function addUser(username,password, uuid){
+
+	db.run('INSERT INTO users ( username, password, uuid ) VALUES (?,?,?);', [username,password, uuid], function(err) {
+	    if (err) {
+	      return console.log(err.message);
+	    }
+
+	    console.log(`A row has been inserted with rowid ${this.lastID}`);
+	  });
 }
+
+
+
 
 //Index page
 app.get('/', (req, res) => {
@@ -81,26 +88,126 @@ app.get('/', (req, res) => {
 
 
 app.post('/login', function (req, res) {
-    //res.send('POST Request');
-    //console.log(res);
+
     console.log(req.body.username);
     console.log(req.body.password);
 
-    /*
-		-Check submission
-		*/
+    //res.write(JSON.stringify(rows));
+
+    db.all('SELECT * FROM users WHERE username = ? ', [req.body.username], (err, rows) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+
+        	if(rows.length > 0){
+        		respo = rows[0];
+
+        		//Password is right, respond with cookie
+        		if( rows[0]['password'] == req.body.password ){
+        			res.cookie('cookieName',rows[0]['uuid'], {expire : new Date() + 9999});
+        			respo['register_status'] = "Successfully logged in!";
+        		}
+
+        		//passwrod is wrong
+        		else{
+        			respo = {"register_status":"Invalid password"};
+        		}
+
+        		res.writeHead(200, {'Content-Type': 'application/json'});
+            	res.write( JSON.stringify(respo) );
+            	res.end();
+            }
+
+            //No users
+            else{
+            	res.writeHead(200, {'Content-Type': 'application/json'});
+
+            	respo = {"register_status":"Invalid username"};
+
+            	res.write(JSON.stringify(respo));
+            	res.end();
+            }
+        }
+    });
 });
 
 
 app.post('/register', function (req, res) {
-    //res.send('POST Request');
-    //console.log(res);
+
     console.log(req.body.username);
     console.log(req.body.password);
 
-    /*
-		-Check submission
-		*/
+    db.all('SELECT * FROM users WHERE username = ?', [req.body.username], (err, rows) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+
+        	if(rows.length > 0){
+        		res.writeHead(200, {'Content-Type': 'application/json'});
+
+            	respo = {"register_status":"User already registered"};
+
+            	res.write(JSON.stringify(respo) );
+            	res.end();
+            }
+
+            //No user found so add it
+            else{
+            	// set a new cookie
+            	var random = uuid()
+            	res.cookie('cookieName',random, {expire : new Date() + 9999});
+            	console.log('Cookie created successfully: ' + random);
+
+            	res.writeHead(200, {'Content-Type': 'application/json'});
+
+            	addUser(req.body.username,req.body.password,random);
+
+
+            	respo = {"register_status":"Registered!"};
+
+            	res.write(JSON.stringify(respo));
+            	res.end();
+            }
+        }
+    });
+
+
+});
+
+
+
+app.post('/getuser', function (req, res) {
+
+    console.log(req.body.uuid);
+
+    //res.write(JSON.stringify(rows));
+
+    db.all('SELECT * FROM users WHERE uuid = ? ', [req.body.uuid], (err, rows) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+
+        	if(rows.length > 0){
+
+        		res.writeHead(200, {'Content-Type': 'application/json'});
+            	res.write( JSON.stringify(rows[0]) );
+            	res.end();
+            }
+
+            //No users
+            else{
+            	res.writeHead(200, {'Content-Type': 'application/json'});
+
+            	respo = {"register_status":"Invalid uuid"};
+
+            	res.write(JSON.stringify(respo));
+            	res.end();
+            }
+        }
+    });
 });
 
 

@@ -21,6 +21,7 @@
 	<link rel="stylesheet" href="css/skeleton.css">
 	<link rel="stylesheet" href="css/style.css">
 
+
 </head>
 
 
@@ -44,8 +45,15 @@
 
 <div class="register section">
 	<div class="container" > 
-		<button class="u-pull-right" onclick="showPopup()">Register</button>
-		
+
+		<div class="u-pull-right five columns" v-if="testCookie">
+			Logged in as {{username}}
+		</div>
+
+		<button v-else class="u-pull-right" onclick="showPopup()">
+		  Register
+		</div>
+
 	</div>
 </div>
 
@@ -56,11 +64,11 @@
 		
 		    <div class="offset-by-three six columns">
 		      <label for="username">Username</label>
-		      <input class="u-full-width" name="username" type="text" v-model="username" placeholder="AlienSlayer" id="usernameInput">
+		      <input class="u-full-width" name="username" type="text" v-model="username" placeholder="AlienSlayer">
 		    </div>
 		    <div class="offset-by-three six columns">
 		      <label for="password">Password</label>
-		      <input class="u-full-width" name="password" type="password" type="text" v-model="password" placeholder="Password" id="passwordInput">
+		      <input class="u-full-width" name="password" type="password" type="text" v-model="password" placeholder="Password">
 		      </select>
 		    </div>
 
@@ -73,31 +81,32 @@
 </div>
 
 
-<div class="heading section">
+<div v-if="notLoggedIn" class="heading section">
 	<div class="container" >  
 		<h1 id="titleHeading">Log in</h1>
 	</div>
 </div>
 
 
-<div class="login section">
+<div v-if="notLoggedIn" class="login section">
 	<div class="container">
-		<form action="/login" method="post" enctype="application/x-www-form-urlencoded">
+
 		    <div class="six columns">
 		      <label for="username">Username</label>
-		      <input class="u-full-width" name="username" type="text" placeholder="AlienSlayer" id="usernameInput">
+		      <input class="u-full-width" name="username" type="text" placeholder="AlienSlayer" v-model="username" id="usernameInput">
 		    </div>
 		    <div class="six columns">
 		      <label for="password">Password</label>
-		      <input class="u-full-width" name="password" type="password" placeholder="Password" id="passwordInput">
+		      <input class="u-full-width" name="password" type="password" v-model="password" placeholder="Password" id="passwordInput">
 		      </select>
 		    </div>
 
+		  <div class="offset-by-four four columns" v-bind:style="text_color">{{register_status}}</div>
 
 		  <div class="twelve columns" style="text-align: right;">
-		  	<input class="button-primary" type="submit" value="Submit">
+		  	<input class="button-primary" type="submit" value="Submit" @click="login">
 		  </div>
-		</form>
+
 	</div>
 </div>
 
