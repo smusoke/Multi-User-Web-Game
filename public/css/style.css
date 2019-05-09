@@ -27,6 +27,15 @@
   text-decoration: none;
 }
 
+#nav a{
+  text-align: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: .8%;
+  font-size: 90%;
+  text-decoration: none;
+}
+
 #popup{
     position: absolute;
     top: 0;

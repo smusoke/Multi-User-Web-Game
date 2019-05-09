@@ -86,6 +86,21 @@ app.get('/', (req, res) => {
 	        });
 });
 
+//Leaderboad page
+app.get('/leaderboards.html', (req, res) => {
+
+	fs.readFile("leaderboards.html", function (error, pgResp) {
+	            if (error) {
+	                res.writeHead(404);
+	                res.write('Contents you are looking are Not Found');
+	            } else {
+	                res.writeHead(200, { 'Content-Type': 'text/html' });
+	                res.write(pgResp);
+	            }
+	            res.end();
+	        });
+});
+
 
 app.post('/login', function (req, res) {
 
