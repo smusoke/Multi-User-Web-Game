@@ -2,6 +2,7 @@ var app;
 var green = "#1fce1f";
 var red = "#f44336"
 
+
 function Init() {
 	app = new Vue({
 		el: "#app",
@@ -34,12 +35,9 @@ function Init() {
 
 					//Get user info
 					getUser(decodedCookie);
-
-
-					showGame();
 					return true;
 				}
-			}
+			}//testcookie
 		}
 	});
 }
@@ -74,8 +72,13 @@ function login(event) {
 		
 		$.post("/login", { username: app.username, password : app.password}, (data) => {
 			app.register_status = data['register_status'];
-			//app.notLoggedIn = false;
-			//app.testCookie = true; 
+			console.log(data['register_status']);
+
+			if( data['register_status'].includes('!') ){
+				app.notLoggedIn = false;
+				app.testCookie = true;
+				showGame();
+			}
 		}, "json");
 
 		//We want register status, uuid(set cookie) *Server sets cookie
@@ -95,6 +98,7 @@ function getUser(id) {
 	$.post("/getuser", { uuid: id}, (data) => {
 			app.register_status = data['register_status'];
 			app.username = data['username'];
+			showGame();
 			//app.testCookie = true; 
 		}, "json");
 
@@ -151,4 +155,10 @@ function getCookie(cname) {
   return "";
 }
 
+function logout(){
 
+	document.cookie = "cookieName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+	location.reload();
+	return false;
+
+}
