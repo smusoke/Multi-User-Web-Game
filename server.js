@@ -66,6 +66,14 @@ function addUser(username,password, uuid){
 
 	    console.log(`A row has been inserted with rowid ${this.lastID}`);
 	  });
+
+    db.run('INSERT INTO scores ( username, score ) VALUES (?,?);', [username,"0"], function(err) {
+        if (err) {
+          return console.log(err.message);
+        }
+
+        console.log(`A row has been inserted with rowid ${this.lastID}`);
+      });
 }
 
 
@@ -143,6 +151,24 @@ app.post('/login', function (req, res) {
             	res.write(JSON.stringify(respo));
             	res.end();
             }
+        }
+    });
+});
+
+
+app.get('/getscores', function (req, res) {
+
+    //res.write(JSON.stringify(rows));
+
+
+    db.all('SELECT * FROM scores ORDER BY score DESC LIMIT 10', (err, rows) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.write( JSON.stringify(rows) );
+            res.end();
         }
     });
 });

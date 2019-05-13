@@ -2,6 +2,7 @@ var app;
 var green = "#1fce1f";
 var red = "#f44336"
 
+//test
 
 function Init() {
 	app = new Vue({
@@ -10,36 +11,57 @@ function Init() {
 			username: undefined,
 			password: undefined,
 			text_color: "color:" + green,
+			notLoggedIn: true,
+			cookieTrue: false,
 			register_status: "",
-			notLoggedIn: true
 		},
 		computed: {
-			/*
-			username: function(){
-				console.log("Need to get login");
-				return undefined;
-			}*/
 
-
-			testCookie: function() {
-				var decodedCookie = getCookie("cookieName");
-				console.log("Cookie is: " + decodedCookie);
-
-
-				if (decodedCookie === "") {
-					return false;
-				}
-				else {
-					console.log("Logged in!!");
-					this.notLoggedIn = false;
-
-					//Get user info
-					getUser(decodedCookie);
-					return true;
-				}
-			}//testcookie
 		}
 	});
+}
+
+var cookieCheck = setInterval(() => {
+		var decodedCookie = getCookie("cookieName");
+		//console.log("Cookie is: " + decodedCookie);
+
+		if (decodedCookie === "") {
+			;
+		}
+		else {
+			console.log("Logged in!!");
+
+			//Get user info
+			getUser(decodedCookie);
+			clearInterval(cookieCheck);
+			app.cookieTrue = true;
+		}
+
+	},500) ;
+
+
+function fillTable(){
+	$.get("/getscores", (data) => {
+			app.register_status = data['register_status'];
+			app.username = data['username'];
+			//app.testCookie = true; 
+			var leaderboard = document.getElementById("leaderboardBody");
+
+			for( var i = 0; i < data.length; i++ )
+			{
+				var entry = document.createElement("tr");                 
+				var user = document.createElement("td");
+				user.innerText = data[i]['username'];
+				var score = document.createElement("td");
+				score.innerText = data[i]['score'];
+				
+
+				entry.appendChild(user);
+				entry.appendChild(score);
+
+				leaderboard.appendChild(entry);
+			}
+		}, "json");
 }
 
 function register(event) {
@@ -52,8 +74,6 @@ function register(event) {
 		
 		$.post("/register", { username: app.username, password : app.password}, (data) => {
 			app.register_status = data['register_status'];
-			app.notLoggedIn = false;
-			app.testCookie = true; 
 		}, "json");
 
 		//We want register status, uuid(set cookie) *Server sets cookie
@@ -75,8 +95,6 @@ function login(event) {
 			console.log(data['register_status']);
 
 			if( data['register_status'].includes('!') ){
-				app.notLoggedIn = false;
-				app.testCookie = true;
 				showGame();
 			}
 		}, "json");
@@ -98,7 +116,6 @@ function getUser(id) {
 	$.post("/getuser", { uuid: id}, (data) => {
 			app.register_status = data['register_status'];
 			app.username = data['username'];
-			showGame();
 			//app.testCookie = true; 
 		}, "json");
 
@@ -106,29 +123,36 @@ function getUser(id) {
 }
 
 function showGame() {
-  document.getElementById("main").style.display = "none";
-
-  var div = document.createElement("div");
-  div.className = "container";
-  var game = document.createElement("iframe");  
-  game.src = "/game/index.html";
-  game.className = "twelve columns";
-  game.minHeight = "500px";
 
 
-  /*	TO DO FIX HEIGHT
-  game.width = "900px";
-  game.height = "700px";*/                    
+	document.getElementById("main").style.display = "none";
 
-  div.appendChild(game);
+	var div = document.createElement("div");
+	div.className = "container";
+	div.id = "game";
+	var game = document.createElement("iframe");  
+	game.src = "/game/index.html";
+	game.className = "twelve columns";
+	game.minHeight = "500px";
+
+
+	/*	TO DO FIX HEIGHT
+	game.width = "900px";
+	game.height = "700px";*/                    
+
+	div.appendChild(game);
 			   
 
 
-  // Get the reference node
-  var referenceNode = document.getElementsByClassName('footer section')[0];
+	// Get the reference node
+	var referenceNode = document.getElementsByClassName('footer section')[0];
 
-  // Insert the new node before the reference node
-  referenceNode.parentNode.insertBefore(div, referenceNode);    
+	// Insert the new node before the reference node
+	if( !document.getElementById("game") ){
+		referenceNode.parentNode.insertBefore(div, referenceNode);
+	}
+
+
 }
 
 function showPopup() {

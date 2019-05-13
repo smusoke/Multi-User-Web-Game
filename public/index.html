@@ -35,6 +35,7 @@
 		<div class="row" id="nav" style="margin-top: 3px;">
 			<p class="three columns" onclick="showGame()" style="color:white">Play Now</p>
 			<a class="three columns" href="/leaderboards.html" style="color:white">Leaderboards</a>
+			<a class="three columns" href="/index.html" style="color:white">Sign in</a>
 		</div>
 	</div>
 </div>
@@ -44,8 +45,8 @@
 <div class="register section">
 	<div class="container" > 
 
-		<div class="u-pull-right five columns" v-if="testCookie">
-			Logged in as {{username}} <a id="logout" onclick="logout();" href="#">(Logout)</a>
+		<div class="u-pull-right five columns" v-if="cookieTrue">
+			Logged in as <b>{{username}}</b> <a id="logout" onclick="logout();" href="#">(Logout)</a>
 		</div>
 
 		<button v-else class="u-pull-right" onclick="showPopup()">
@@ -54,10 +55,6 @@
 
 	</div>
 </div>
-
-
-<div id="main">
-
 
 
 <div id="popup" style="display: none;">
@@ -82,6 +79,11 @@
 		  	<button @click="register" class="button-primary">Submit</button> 
 		  </div>
 </div>
+
+
+<div id="main">
+
+
 
 
 <div v-if="notLoggedIn" class="heading section">

@@ -26,7 +26,7 @@
 
 
 
-<body style="background-color:#EEE;" onload="Init()">
+<body style="background-color:#EEE;" onload="Init(); fillTable();">
 
 <div id="app">
 
@@ -35,36 +35,59 @@
 		<div class="row" id="nav" style="margin-top: 3px;">
 			<p class="three columns" onclick="showGame()" style="color:white">Play Now</p>
 			<a class="three columns" href="/leaderboards.html" style="color:white">Leaderboards</a>
+			<a class="three columns" href="/index.html" style="color:white">Sign in</a>
 		</div>
 	</div>
 </div>
 
 
+<div class="register section">
+	<div class="container" > 
 
-<div class="table section" id="main">
+		<div class="u-pull-right five columns" v-if="cookieTrue">
+			Logged in as <b>{{username}}</b> <a id="logout" onclick="logout();" href="#">(Logout)</a>
+		</div>
+
+		<button v-else class="u-pull-right" onclick="showPopup()">
+		  Register
+		</button>
+
+	</div>
+</div>
+
+<div id="popup" style="display: none;">
+		<button onclick="closePopup()">Close</button>
+
+		<h2 style="display: center;">Register</h2>
+		
+		    <div class="offset-by-three six columns">
+		      <label for="username">Username</label>
+		      <input class="u-full-width" name="username" type="text" v-model="username" placeholder="AlienSlayer">
+		    </div>
+		    <div class="offset-by-three six columns">
+		      <label for="password">Password</label>
+		      <input class="u-full-width" name="password" type="password" type="text" v-model="password" placeholder="Password">
+		      </select>
+		    </div>
+
+		    <div class="offset-by-four four columns" v-bind:style="text_color">{{register_status}}</div>
+
+
+		  <div class="twelve columns" style="text-align: center;">
+		  	<button @click="register" class="button-primary">Submit</button> 
+		  </div>
+</div>
+
+<div class="table section" id="main" onload="fillTable();">
 	<div class="container">
 		<table class="u-full-width">
 		  <thead>
 		    <tr>
-		      <th>Name</th>
-		      <th>Age</th>
-		      <th>Sex</th>
-		      <th>Location</th>
+		      <th>Username</th>
+		      <th>Score</th>
 		    </tr>
 		  </thead>
-		  <tbody>
-		    <tr>
-		      <td>Dave Gamache</td>
-		      <td>26</td>
-		      <td>Male</td>
-		      <td>San Francisco</td>
-		    </tr>
-		    <tr>
-		      <td>Dwayne Johnson</td>
-		      <td>42</td>
-		      <td>Male</td>
-		      <td>Hayward</td>
-		    </tr>
+		  <tbody id="leaderboardBody">
 		  </tbody>
 		</table>
 	</div>
