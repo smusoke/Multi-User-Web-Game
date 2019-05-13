@@ -1,10 +1,11 @@
-const express = require('express')
+const express = require('express');
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
 const sqlite3 = require('sqlite3');
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const uuid = require('uuid/v4')
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const uuid = require('uuid/v4');
+const crypto = require('crypto');
 
 
 const app = express()
@@ -77,6 +78,11 @@ function addUser(username,password, uuid){
 }
 
 
+function hashString(str){
+    var hash = crypto.createHash('md5').update(str).digest("hex");
+    console.log(hash);
+    return hash;
+}
 
 
 //Index page
@@ -110,6 +116,7 @@ app.get('/leaderboards.html', (req, res) => {
 });
 
 
+//
 app.post('/login', function (req, res) {
 
     console.log(req.body.username);
@@ -127,7 +134,7 @@ app.post('/login', function (req, res) {
         		respo = rows[0];
 
         		//Password is right, respond with cookie
-        		if( rows[0]['password'] == req.body.password ){
+        		if( rows[0]['password'] == hashString(req.body.password) ){
         			res.cookie('cookieName',rows[0]['uuid'], {expire : new Date() + 9999});
         			respo['register_status'] = "Successfully logged in!";
         		}
@@ -203,7 +210,7 @@ app.post('/register', function (req, res) {
 
             	res.writeHead(200, {'Content-Type': 'application/json'});
 
-            	addUser(req.body.username,req.body.password,random);
+            	addUser(req.body.username, hashString(req.body.password) ,random);
 
 
             	respo = {"register_status":"Registered!"};
