@@ -54,7 +54,7 @@ function fillTable(){
 				user.innerText = data[i]['username'];
 				var score = document.createElement("td");
 				score.innerText = data[i]['score'];
-				
+
 
 				entry.appendChild(user);
 				entry.appendChild(score);
@@ -133,7 +133,7 @@ function showGame() {
 	var game = document.createElement("iframe");  
 	game.src = "/game/index.html";
 	game.className = "twelve columns";
-	game.minHeight = "500px";
+	game.style.minHeight = "470px";
 
 
 	/*	TO DO FIX HEIGHT
@@ -182,7 +182,7 @@ function getCookie(cname) {
 function logout(){
 
 	document.cookie = "cookieName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
-	location.reload();
+	window.location.href = "/";
 	return false;
 
 }
