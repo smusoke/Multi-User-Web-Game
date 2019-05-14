@@ -44,7 +44,7 @@
 <div class="register section">
 	<div class="container" > 
 
-		<div class="u-pull-right five columns" v-if="cookieTrue">
+		<div class="u-pull-right" v-if="cookieTrue">
 			Logged in as <b>{{username}}</b> <a id="logout" onclick="logout();" href="#">(Logout)</a>
 		</div>
 
@@ -78,13 +78,14 @@
 		  </div>
 </div>
 
-<div class="table section" id="main" onload="fillTable();" style="margin-top: 3vh; margin-bottom: 2vh;">
+<div class="tablesection" id="main" onload="fillTable();" style="margin-top: 3vh; margin-bottom: 2vh;">
 	<div class="container">
-		<table class="offset-by-two eight columns">
+		<table class="offset-by-two eight columns" id="leaderboardTable">
 		  <thead>
 		    <tr>
-		      <th>Username</th>
-		      <th>Score</th>
+		    	<th></th>
+		     	<th>Username</th>
+		    	<th>Score</th>
 		    </tr>
 		  </thead>
 		  <tbody id="leaderboardBody">

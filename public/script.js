@@ -2,9 +2,9 @@ var app;
 var green = "#1fce1f";
 var red = "#f44336"
 
-//test
 
 function Init() {
+
 	app = new Vue({
 		el: "#app",
 		data: {
@@ -17,14 +17,33 @@ function Init() {
 
 			//Todo: store user info for stats page
 			gamesPlayed: 0,
-			avatar:"/images/default.jpg",
+			avatar: "/avatars/default.jpg",
+			availableAvatars: [],
 		},
 		computed: {
+			avatars: function(){
+				$.get("/getavatars", (data) => {
+						console.log("in here");
 
+						finalAvatars = [];
+
+						for( var i = 0; i < data['avatars'].length; i++ )
+						{
+							finalAvatars.push( data['avatars'][i] );
+						}
+
+						this.availableAvatars = finalAvatars;
+						console.log(finalAvatars);
+						return finalAvatars;
+					}, "json");
+			}
 		}
 	});
+
 }
 
+
+//Check for login
 var cookieCheck = setInterval(() => {
 		var decodedCookie = getCookie("cookieName");
 		//console.log("Cookie is: " + decodedCookie);
@@ -44,6 +63,20 @@ var cookieCheck = setInterval(() => {
 	},500) ;
 
 
+
+//Avatar click listener
+function selectAvatar(element){
+	var el = document.createElement('a');
+	el.href = element.src;
+
+	app.avatar = el.pathname;
+	console.log(app.avatar);
+
+	//Make green
+	element.style.border = "4px solid #8fff0c";
+}
+
+
 function fillTable(){
 	$.get("/getscores", (data) => {
 			app.register_status = data['register_status'];
@@ -53,13 +86,24 @@ function fillTable(){
 
 			for( var i = 0; i < data.length; i++ )
 			{
-				var entry = document.createElement("tr");                 
+				var entry = document.createElement("tr");  
+
+				var avatar = document.createElement("td");
+				var image = document.createElement("img");
+				image.src = data[i]['avatar'];
+				image.style.width = "5vw";
+				avatar.appendChild(image);    
+
 				var user = document.createElement("td");
-				user.innerText = data[i]['username'];
+				var userLink = document.createElement("a");
+				userLink.href = "/users/" + data[i]['username'];
+				userLink.innerText = data[i]['username'];
+				user.appendChild(userLink);
+
 				var score = document.createElement("td");
 				score.innerText = data[i]['score'];
 
-
+				entry.appendChild(avatar);
 				entry.appendChild(user);
 				entry.appendChild(score);
 
@@ -68,6 +112,29 @@ function fillTable(){
 		}, "json");
 }
 
+
+
+function fillUser(){
+
+	var user = location.href.split("/users/").pop()
+	console.log(user)
+
+	$.post("/getinfo", { username : user }, (data) => {
+			app.gamesPlayed = data['gamesPlayed'];
+			app.avatar = data['avatar'];
+
+			//TODO ADD USER INFO TO PAGE
+			var leaderboard = document.getElementById("avatarImage");
+			leaderboard.src = data['avatar'];
+
+			
+		}, "json");
+}
+
+
+
+
+
 function register(event) {
 	//console.log(app.register_status);
 	//console.log(app.testCookie);
@@ -75,14 +142,17 @@ function register(event) {
 	if (app.username !== undefined) {
 		console.log(app.username);
 		console.log(app.password);
+		//app.avatar = 
 		
-		$.post("/register", { username: app.username, password : app.password}, (data) => {
+		$.post("/register", { username: app.username, password : app.password, avatar: app.avatar}, (data) => {
 			app.register_status = data['register_status'];
 		}, "json");
 
 		//We want register status, uuid(set cookie) *Server sets cookie
 		console.log(app.register_status);
 		console.log(typeof(app.register_status));
+
+		setTimeout( closePopup(), 2500);
 	}
 }
 
@@ -118,11 +188,9 @@ function getUser(id) {
 	//console.log(app.testCookie);
 
 	$.post("/getuser", { uuid: id}, (data) => {
-			app.register_status = data['register_status'];
 			app.username = data['username'];
 			//app.testCookie = true; 
 		}, "json");
-
 
 }
 

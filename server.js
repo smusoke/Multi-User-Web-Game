@@ -58,7 +58,7 @@ var db = new sqlite3.Database(db_filename, sqlite3.OPEN_READWRITE, (err) => {
 
 
 //Insert a username and pass
-function addUser(username,password, uuid){
+function addUser(username,password, avatar, uuid){
 
 	db.run('INSERT INTO users ( username, password, uuid ) VALUES (?,?,?);', [username,password, uuid], function(err) {
 	    if (err) {
@@ -68,7 +68,7 @@ function addUser(username,password, uuid){
 	    console.log(`A row has been inserted with rowid ${this.lastID}`);
 	  });
 
-    db.run('INSERT INTO scores ( username, score, avatar, gamesPlayed, joinedDate ) VALUES (?,?,?,?,?);', [username,"0","/images/default.jpg",0, new Date().toLocaleDateString() ], function(err) {
+    db.run('INSERT INTO scores ( username, score, avatar, gamesPlayed, joinedDate ) VALUES (?,?,?,?,?);', [username,"0",avatar,0, new Date().toLocaleDateString() ], function(err) {
         if (err) {
           return console.log(err.message);
         }
@@ -100,22 +100,39 @@ app.get('/', (req, res) => {
 	        });
 });
 
-//todo listen for user path
-///names/:nconst
-//Index page
-app.get('/users/:nconst', (req, res) => {
-    console.log(req.params.nconst);
 
-    db.all('SELECT * FROM scores WHERE username = ?', [req.params.nconst], (err, rows) => {
+
+
+
+app.post('/getinfo', (req, res) => {
+    console.log("Get info: " + req.body.username);
+
+    
+    db.all('SELECT * FROM scores WHERE username = ?', [req.body.username], (err, rows) => {
         if (err) {
             console.log(err);
         }
         else {
             res.writeHead(200, {'Content-Type': 'application/json'});
-            res.write( JSON.stringify(rows) );
+            res.write( JSON.stringify(rows[0]) );
             res.end();
         }
     });
+    
+
+});
+
+
+app.get('/getavatars', (req, res) => {
+
+    var final = {}
+    final['avatars'] = fs.readdirSync(public_dir+"/avatars/");
+    console.log(final);
+
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write( JSON.stringify(final) );
+    res.end();
+    
 });
 
 
@@ -230,7 +247,7 @@ app.post('/register', function (req, res) {
 
             	res.writeHead(200, {'Content-Type': 'application/json'});
 
-            	addUser(req.body.username, hashString(req.body.password) ,random);
+            	addUser(req.body.username, hashString(req.body.password) ,req.body.avatar ,random);
 
 
             	respo = {"register_status":"Registered!"};
@@ -278,6 +295,24 @@ app.post('/getuser', function (req, res) {
     });
 });
 
+
+//user path
+app.get('/users/:nconst', (req, res) => {
+    console.log(req.params.nconst);
+
+    fs.readFile(public_dir + "/user.html", function (error, pgResp) {
+                if (error) {
+                    console.log(error);
+                    res.writeHead(404);
+                    res.write('Contents you are looking are Not Found');
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                    res.write(pgResp);
+                }
+                res.end();
+            });
+
+});
 
 
 app.listen(port, () => {

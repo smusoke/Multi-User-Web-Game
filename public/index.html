@@ -45,7 +45,7 @@
 <div class="register section">
 	<div class="container" > 
 
-		<div class="u-pull-right five columns" v-if="cookieTrue">
+		<div class="u-pull-right" v-if="cookieTrue">
 			Logged in as <b>{{username}}</b> <a id="logout" onclick="logout();" href="#">(Logout)</a>
 		</div>
 
@@ -70,6 +70,14 @@
 		      <label for="password">Password</label>
 		      <input class="u-full-width" name="password" type="password" type="text" v-model="password" placeholder="Password">
 		      </select>
+		    </div>
+
+		    <div class="offset-by-two eight columns">
+		    	<span>Select Avatar</span>
+		    </div>
+
+		    <div class="offset-by-two eight columns" v-if="!avatars">
+		    	<img v-for="img in availableAvatars" class="avatarImage" onclick="selectAvatar(this);" v-bind:src="'/avatars/' + img" width="65vw" style="margin: 3px">
 		    </div>
 
 		    <div class="offset-by-four four columns" v-bind:style="text_color">{{register_status}}</div>

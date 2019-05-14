@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<title>Tom Evaders</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- FONT
+	–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script type="text/javascript" src="../script.js" async=""></script>
+	<script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+	
+	<link rel="stylesheet" href="../css/normalize.css">
+	<link rel="stylesheet" href="../css/skeleton.css">
+	<link rel="stylesheet" href="../css/style.css">
+
+
+</head>
+
+
+
+<body style="background-color:#EEE;" onload="Init(); fillUser();">
+
+<div id="app">
+
+	<div class="nav section">
+		<div class="container" >  
+			<div class="row" id="nav" style="margin-top: 3px;">
+				<p class="three columns" onclick="showGame()" style="color:white">Play Now</p>
+				<a class="three columns" href="/leaderboards.html" style="color:white">Leaderboards</a>
+				<a class="three columns" href="/index.html" style="color:white">Sign in</a>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<div class="avatar section">
+		<div class="container" > 
+
+			<div class="offset-by-three three columns">
+				<img id="avatarImage" v-bind:src="avatar" width="300px">
+			</div>
+
+		</div>
+	</div>
+
+
+
+
+	<div class="footer section">
+		<div class="container" >  
+		 <footer id="nav" style="padding-left:2%; text-align: center">
+			<p style="color:white; padding-top: 8px;">Tom Evaders</p>
+		</footer>
+		</div>
+	</div>
+
+
+</div>
+
+</body>
+</html>

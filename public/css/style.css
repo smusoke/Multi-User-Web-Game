@@ -53,6 +53,19 @@
     text-align:center
 }
 
+#leaderboardTable a:link {
+  text-decoration: none;
+}
+
+#leaderboardTable a:visited {
+  text-decoration: none;
+}
+
+img { 
+   border: 2px solid #021a40;
+}
+
+
 
 
 
