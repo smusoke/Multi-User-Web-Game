@@ -205,7 +205,8 @@ function showGame() {
 	var game = document.createElement("iframe");  
 	game.src = "/game/index.html";
 	game.className = "twelve columns";
-	game.style.minHeight = "470px";
+	game.style.minHeight = "540px";
+	game.style.minWidth = "400px";
 
 
 	/*	TO DO FIX HEIGHT
