@@ -68,7 +68,7 @@ function addUser(username,password, uuid){
 	    console.log(`A row has been inserted with rowid ${this.lastID}`);
 	  });
 
-    db.run('INSERT INTO scores ( username, score ) VALUES (?,?);', [username,"0"], function(err) {
+    db.run('INSERT INTO scores ( username, score, avatar, gamesPlayed, joinedDate ) VALUES (?,?,?,?,?);', [username,"0","/images/default.jpg",0, new Date().toLocaleDateString() ], function(err) {
         if (err) {
           return console.log(err.message);
         }
@@ -99,6 +99,25 @@ app.get('/', (req, res) => {
 	            res.end();
 	        });
 });
+
+//todo listen for user path
+///names/:nconst
+//Index page
+app.get('/users/:nconst', (req, res) => {
+    console.log(req.params.nconst);
+
+    db.all('SELECT * FROM scores WHERE username = ?', [req.params.nconst], (err, rows) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.write( JSON.stringify(rows) );
+            res.end();
+        }
+    });
+});
+
 
 //Leaderboad page
 app.get('/leaderboards.html', (req, res) => {
@@ -178,6 +197,7 @@ app.get('/getscores', function (req, res) {
             res.end();
         }
     });
+
 });
 
 

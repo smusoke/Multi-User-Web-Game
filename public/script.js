@@ -14,6 +14,10 @@ function Init() {
 			notLoggedIn: true,
 			cookieTrue: false,
 			register_status: "",
+
+			//Todo: store user info for stats page
+			gamesPlayed: 0,
+			avatar:"/images/default.jpg",
 		},
 		computed: {
 
