@@ -1,3 +1,4 @@
+
 //Enemy constructor
 function enemy(x,y,w,h){
     this.x = x;
@@ -89,6 +90,9 @@ function finalTime(){
 var canvas = document.getElementById("mainCanvas");
 var screen = canvas.getContext("2d");
 
+//Username
+var username = location.href.split("?username=").pop();
+
 function game(){
 document.getElementById("play").style.visibility= "hidden";
 gameStartTime = new Date().getTime();
@@ -108,6 +112,7 @@ for(var i = 0; i < 30; i++){
 }
 }
 
+var gameRunning = true;
 //Main game loop
 function update(){
   playerOne.show();
@@ -134,15 +139,19 @@ function update(){
     enemySpeed += 1;
   }
   
-  window.requestAnimationFrame(update);
+  if(gameRunning){
+    window.requestAnimationFrame(update);
+  }
 }
 
 var enemyMove = setInterval(function(){
   for(var i = 0; i < enemies.length; i++){
     enemies[i].move(enemySpeed);
     if(enemies[i].y > 400){
+      gameRunning = false;
       lost();
       clearInterval(enemyMove);
+      break;
     }
   }
   
@@ -151,16 +160,25 @@ var enemyMove = setInterval(function(){
 
 function lost(){
   gameEndTime = new Date().getTime();
-  setInterval(function(){
-   screen.fillStyle = "#8B0000";
-   screen.font = "80px Arial";
-   screen.fillText("GAME OVER",0,100);
-   screen.font = "24px Arial";
-   screen.fillText("Your Score Was: " + score,0,150);
-   screen.font = "18px";
-   screen.fillText('Time Elapsed: '+ finalTime(), 0, 170);
-  document.getElementById("time").innerHTML = finalTime();
+  var run = setInterval(function(){
+     screen.fillStyle = "#8B0000";
+     screen.font = "80px Arial";
+     screen.fillText("GAME OVER",0,100);
+     screen.font = "24px Arial";
+     screen.fillText("Your Score Was: " + score,0,150);
+     screen.font = "18px";
+     screen.fillText('Time Elapsed: '+ finalTime(), 0, 170);
+    document.getElementById("time").innerHTML = finalTime();
 
+
+    //Post score
+    console.log( "test user: " + username );
+
+    $.post("/sendscore", { score: score, username:username }, (data) => {
+        console.log("sent score");
+      }, "json");
+
+    clearInterval(run);
   },50);
 }
 
@@ -178,6 +196,8 @@ window.addEventListener("keydown",function(event){
   }
 });
 
-update();
+if(gameRunning){
+  update();
+}
 
 }

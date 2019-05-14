@@ -203,15 +203,11 @@ function showGame() {
 	div.className = "container";
 	div.id = "game";
 	var game = document.createElement("iframe");  
-	game.src = "/game/index.html";
+	game.src = "/game/index.html?username=" + app.username;
 	game.className = "twelve columns";
 	game.style.minHeight = "540px";
 	game.style.minWidth = "400px";
 
-
-	/*	TO DO FIX HEIGHT
-	game.width = "900px";
-	game.height = "700px";*/                    
 
 	div.appendChild(game);
 			   
@@ -234,6 +230,10 @@ function showPopup() {
 
 function closePopup() {
   document.getElementById("popup").style.display = "none";
+}
+
+function getUsername(){
+	return app.username;
 }
 
 function getCookie(cname) {

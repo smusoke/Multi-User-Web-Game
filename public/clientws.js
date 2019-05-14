@@ -12,10 +12,13 @@ function Init() {
     });
 
     var port = window.location.port || "80";
+    console.log("ws://" + window.location.hostname + ":" + port);
     ws = new WebSocket("ws://" + window.location.hostname + ":" + port);
+
     ws.onopen = (event) => {
         console.log("Connection successful!");
     };
+
     ws.onmessage = (event) => {
         console.log(event.data);
         var message = JSON.parse(event.data);
@@ -30,6 +33,7 @@ function Init() {
         }
     };
 }
+
 
 function SendMessage() {
     ws.send(app.new_message);

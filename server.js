@@ -118,8 +118,31 @@ app.post('/getinfo', (req, res) => {
             res.end();
         }
     });
-    
 
+});
+
+
+
+
+
+app.post('/sendscore', (req, res) => {
+
+    
+    db.all('UPDATE scores SET score = ?, gamesPlayed = gamesPlayed + 1 WHERE username = ?', [req.body.score,req.body.username], (err, rows) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            //update score, gamesplayed
+
+            respo = {"Score update":"Success"};
+
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.write( JSON.stringify(respo) );
+            res.end();
+        }
+    });
+    
 });
 
 
