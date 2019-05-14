@@ -97,6 +97,7 @@ var bullets = [];
 var enemies = [];
 var enemySpeed = 1;
 var score = 0;
+var level =0;
 //Draws enemies
 function drawEnemies(yPos){
 for(var i = 0; i < 30; i++){
@@ -113,6 +114,9 @@ function update(){
   playerOne.show();
 
   document.getElementById("scoreText").innerHTML = score;
+  document.getElementById("level").innerHTML = level;
+
+  
   //Shoot the bullets and checks if they hit an enemy
   for(var i = 0; i < bullets.length; i++){
     bullets[i].move();
@@ -132,6 +136,9 @@ function update(){
   if(enemies.length <= 0){
     drawEnemies(50);
     enemySpeed += 1;
+    level += 1;
+    score += 20;
+
   }
   
   window.requestAnimationFrame(update);
@@ -152,13 +159,15 @@ var enemyMove = setInterval(function(){
 function lost(){
   gameEndTime = new Date().getTime();
   setInterval(function(){
-   screen.fillStyle = "#8B0000";
+   screen.fillStyle = "#fff";
    screen.font = "80px Arial";
    screen.fillText("GAME OVER",0,100);
    screen.font = "24px Arial";
    screen.fillText("Your Score Was: " + score,0,150);
    screen.font = "18px";
    screen.fillText('Time Elapsed: '+ finalTime(), 0, 170);
+   screen.fillText("Level is: " + level,0,190);
+
   document.getElementById("time").innerHTML = finalTime();
 
   },50);
