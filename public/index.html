@@ -28,110 +28,109 @@
 
 <body style="background-color:#EEE;" onload="Init()">
 
-<div id="app">
+	<div id="app">
 
-<div class="nav section">
-	<div class="container" >  
-		<div class="row" id="nav" style="margin-top: 3px;">
-			<p class="three columns" onclick="showGame()" style="color:white">Play Now</p>
-			<a class="three columns" href="/leaderboards.html" style="color:white">Leaderboards</a>
-			<a class="three columns" href="/index.html" style="color:white">Sign in</a>
-		</div>
-	</div>
-</div>
-
-
-
-<div class="register section">
-	<div class="container" > 
-
-		<div class="u-pull-right" v-if="cookieTrue">
-			Logged in as <b>{{username}}</b> <a id="logout" onclick="logout();" href="#">(Logout)</a>
+		<div class="nav section">
+			<div class="container" >  
+				<div class="row" id="nav" style="margin-top: 3px;">
+					<p class="three columns" onclick="showGame()" style="color:white">Play Now</p>
+					<a class="three columns" href="/leaderboards.html" style="color:white">Leaderboards</a>
+					<a class="three columns" href="/index.html" style="color:white">Sign in</a>
+				</div>
+			</div>
 		</div>
 
-		<button v-else class="u-pull-right" style="margin-top: 3px" onclick="showPopup()">
-		  Register
-		</button>
-
-	</div>
-</div>
 
 
-<div id="popup" style="display: none;">
-		<button onclick="closePopup()">Close</button>
+		<div class="register section">
+			<div class="container" > 
 
-		<h2 style="display: center;">Register</h2>
-		
-		    <div class="offset-by-three six columns">
-		      <label for="username">Username</label>
-		      <input class="u-full-width" name="username" type="text" v-model="username" placeholder="AlienSlayer">
-		    </div>
-		    <div class="offset-by-three six columns">
-		      <label for="password">Password</label>
-		      <input class="u-full-width" name="password" type="password" type="text" v-model="password" placeholder="Password">
-		      </select>
-		    </div>
+				<div class="u-pull-right" v-if="cookieTrue">
+					Logged in as <b>{{username}}</b> <a id="logout" onclick="logout();" href="#">(Logout)</a>
+				</div>
 
-		    <div class="offset-by-two eight columns">
-		    	<span>Select Avatar</span>
-		    </div>
+				<button v-else class="u-pull-right" style="margin-top: 3px" onclick="showPopup()">
+				  Register
+				</button>
 
-		    <div class="offset-by-two eight columns" v-if="!avatars">
-		    	<img v-for="img in availableAvatars" class="avatarImage" onclick="selectAvatar(this);" v-bind:src="'/avatars/' + img" width="65vw" style="margin: 3px">
-		    </div>
-
-		    <div class="offset-by-four four columns" v-bind:style="text_color">{{register_status}}</div>
+			</div>
+		</div>
 
 
-		  <div class="twelve columns" style="text-align: center;">
-		  	<button @click="register" class="button-primary">Submit</button> 
-		  </div>
-</div>
+		<div id="popup" style="display: none;">
+				<button onclick="closePopup()">Close</button>
+
+				<h2 style="display: center;">Register</h2>
+				
+				    <div class="offset-by-three six columns">
+				      <label for="username">Username</label>
+				      <input class="u-full-width" name="username" type="text" v-model="username" placeholder="AlienSlayer">
+				    </div>
+				    <div class="offset-by-three six columns">
+				      <label for="password">Password</label>
+				      <input class="u-full-width" name="password" type="password" type="text" v-model="password" placeholder="Password">
+				      </select>
+				    </div>
+
+				    <div class="offset-by-two eight columns">
+				    	<span>Select Avatar</span>
+				    </div>
+
+				    <div class="offset-by-two eight columns" v-if="!avatars">
+				    	<img v-for="img in availableAvatars" class="avatarImage" onclick="selectAvatar(this);" v-bind:src="'/avatars/' + img" width="65vw" style="margin: 3px">
+				    </div>
+
+				    <div class="offset-by-four four columns" v-bind:style="text_color">{{register_status}}</div>
 
 
-<div id="main">
+				  <div class="twelve columns" style="text-align: center;">
+				  	<button @click="register" class="button-primary">Submit</button> 
+				  </div>
+		</div>
 
 
+		<div id="main">
 
 
-<div v-if="notLoggedIn" class="heading section">
-	<div class="container" >  
-		<h1 id="titleHeading">Log in</h1>
-	</div>
-</div>
+			<div v-if="notLoggedIn" class="heading section">
+				<div class="container" >  
+					<h1 id="titleHeading">Log in</h1>
+				</div>
+			</div>
 
 
-<div v-if="notLoggedIn" class="login section">
-	<div class="container">
+			<div v-if="notLoggedIn" class="login section">
+				<div class="container">
 
-		    <div class="six columns">
-		      <label for="username">Username</label>
-		      <input class="u-full-width" name="username" type="text" placeholder="AlienSlayer" v-model="username" id="usernameInput">
-		    </div>
-		    <div class="six columns">
-		      <label for="password">Password</label>
-		      <input class="u-full-width" name="password" type="password" v-model="password" placeholder="Password" id="passwordInput">
-		      </select>
-		    </div>
+					    <div class="six columns">
+					      <label for="username">Username</label>
+					      <input class="u-full-width" name="username" type="text" placeholder="AlienSlayer" v-model="username" id="usernameInput">
+					    </div>
+					    <div class="six columns">
+					      <label for="password">Password</label>
+					      <input class="u-full-width" name="password" type="password" v-model="password" placeholder="Password" id="passwordInput">
+					      </select>
+					    </div>
 
-		  <div class="offset-by-four four columns" v-bind:style="text_color">{{register_status}}</div>
+					  <div class="offset-by-four four columns" v-bind:style="text_color">{{register_status}}</div>
 
-		  <div class="twelve columns" style="text-align: right;">
-		  	<input class="button-primary" type="submit" value="Submit" @click="login">
-		  </div>
+					  <div class="twelve columns" style="text-align: right;">
+					  	<input class="button-primary" type="submit" value="Submit" @click="login">
+					  </div>
 
-	</div>
-</div>
+				</div>
+			</div>
 
-</div>
+		</div>
 
-<div class="footer section">
-	<div class="container" >  
-	 <footer id="nav" style="padding-left:2%; text-align: center">
-		<p style="color:white; padding-top: 8px;">Tom Evaders</p>
-	</footer>
-	</div>
-</div>
+
+		<div class="footer section">
+			<div class="container" >  
+			 <footer id="nav" style="padding-left:2%; text-align: center">
+				<p style="color:white; padding-top: 8px;">Tom Evaders</p>
+			</footer>
+			</div>
+		</div>
 
 
 </div>
