@@ -5,14 +5,36 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Space Invaders</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">  
 </head>
+
 <body>
   <center><canvas id="mainCanvas" width="500" height="400" style="background-color: #252424"></canvas>
-    <button id="play" onClick="game()">Press me to Start</button><br>
-    Score:<h3 id="scoreText"></h3>
-    Time: <h3 id="time"></h3>
-    Level:<h3 id="level"></h3>
-</center>
+
+  	<div class="game section">
+  		<div class="container" > 
+
+  			<div class="u-full-width">
+  				<button id="play" onClick="game()">Press me to Start</button>
+  			</div>
+
+  			<div class="three columns">
+  				Score:<h3 id="scoreText"></h3>
+  			</div>
+
+  			<div class="three columns">
+  				    Time: <h3 id="time"></h3>
+  			</div>
+
+  			<div class="three columns">
+  				    Level:<h3 id="level"></h3>
+  			</div>
+  		</div>
+  	</div>
+
+	</center>
 
 
     <script type="text/javascript" src="game.js"></script>

@@ -42,21 +42,47 @@
 	</div>
 
 
+	<div id="main">
+		<div class="name section">
+			<div class="container" > 
 
+				<h1 style="text-align: center; margin-top: 5px;">{{username}}</h1>
 
-
-	<div class="avatar section">
-		<div class="container" > 
-
-			<div class="offset-by-three three columns">
-				<img id="avatarImage" v-bind:src="avatar" width="300px">
 			</div>
-
 		</div>
+
+
+		<div class="avatar section">
+			<div class="container" > 
+
+				<div class="offset-by-three three columns">
+					<img id="avatarImage" style="margin-top: 4px;margin-bottom: 4px;" v-bind:src="avatar" width="300px">
+				</div>
+
+			</div>
+		</div>
+
+		<div class="info section">
+			<div class="container" style="border: 2px solid #021a40; margin-bottom: 6px;"> 
+				<h3 style="text-align: center;">Stats</h3>
+
+				
+				<div class="offset-by-two three columns">
+					High Score: {{highScore}}
+				</div>
+				<div class="offset-by-two three columns">
+					Date Joined: {{joinedDate}}
+				</div>
+
+				<div class="offset-by-two three columns">
+					Games Played: {{gamesPlayed}}
+				</div>
+			
+
+			</div>
+		</div>
+
 	</div>
-
-
-
 
 	<div class="footer section">
 		<div class="container" >  

@@ -17,6 +17,8 @@ function Init() {
 
 			//Todo: store user info for stats page
 			gamesPlayed: 0,
+			joinedDate: "",
+			highScore: "",
 			avatar: "/avatars/default.jpg",
 			availableAvatars: [],
 		},
@@ -122,6 +124,8 @@ function fillUser(){
 	$.post("/getinfo", { username : user }, (data) => {
 			app.gamesPlayed = data['gamesPlayed'];
 			app.avatar = data['avatar'];
+			app.joinedDate = data['joinedDate'];
+			app.highScore = data['score'];
 
 			//TODO ADD USER INFO TO PAGE
 			var leaderboard = document.getElementById("avatarImage");

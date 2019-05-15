@@ -127,21 +127,34 @@ app.post('/getinfo', (req, res) => {
 
 app.post('/sendscore', (req, res) => {
 
-    
-    db.all('UPDATE scores SET score = ?, gamesPlayed = gamesPlayed + 1 WHERE username = ?', [req.body.score,req.body.username], (err, rows) => {
+    //Get old score
+    db.all('SELECT * FROM scores WHERE username = ?', [req.body.username], (err, rows) => {
         if (err) {
             console.log(err);
         }
         else {
-            //update score, gamesplayed
+            var oldScore = parseInt( rows[0]['score'] );
+            var newScore = parseInt( req.body.score );
 
-            respo = {"Score update":"Success"};
+            //Update info
+            db.all('UPDATE scores SET score = ?, gamesPlayed = gamesPlayed + 1 WHERE username = ?', [Math.max(oldScore,newScore),req.body.username], (err, rows) => {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    //update score, gamesplayed
 
-            res.writeHead(200, {'Content-Type': 'application/json'});
-            res.write( JSON.stringify(respo) );
-            res.end();
+                    respo = {"Score update":"Success"};
+
+                    res.writeHead(200, {'Content-Type': 'application/json'});
+                    res.write( JSON.stringify(respo) );
+                    res.end();
+                }
+            });
+            
         }
     });
+
     
 });
 
