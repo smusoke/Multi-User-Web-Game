@@ -1,7 +1,7 @@
 var app;
 var ws;
 
-function Init() {
+function wsInit() {
     app = new Vue({
         el: "#app",
         data: {

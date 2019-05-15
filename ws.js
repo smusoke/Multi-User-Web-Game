@@ -8,7 +8,7 @@ var app = express();
 var server = http.createServer(app);
 var port = 8019;
 
-var public_dir = path.join(__dirname, 'ws_public');
+var public_dir = path.join(__dirname, 'public');
 
 app.use(express.static(public_dir));
 
@@ -16,6 +16,8 @@ var wss = new WebSocket.Server({server: server});
 var clients = {};
 var client_count = 0;
 var chats = [];
+
+
 wss.on('connection', (ws) => {
     var client_id = ws._socket.remoteAddress + ":" + ws._socket.remotePort;
     console.log('New connection: ' + client_id);

@@ -7,8 +7,17 @@ const cookieParser = require('cookie-parser');
 const uuid = require('uuid/v4');
 const crypto = require('crypto');
 
+const WebSocket = require('ws');
+const http = require('http');
+
+
 
 const app = express()
+
+//WS
+const server = http.createServer(app);
+console.log(server);
+
 const port = 8019
 
 
@@ -20,6 +29,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(cookieParser());
 
+
+//WS
+var wss = new WebSocket.Server({server: server});
+var clients = {};
+var client_count = 0;
+var chats = [];
 
 
 // set a cookie
@@ -350,7 +365,48 @@ app.get('/users/:nconst', (req, res) => {
 
 });
 
+///WS functions
+function UpdateClientCount() {
+    var message = {msg: 'client_count', data: client_count};
+    Broadcast(JSON.stringify(message));
+}
 
-app.listen(port, () => {
+function Broadcast(message) {
+    var id;
+    for (id in clients) {
+        if (clients.hasOwnProperty(id)) {
+            clients[id].send(message);
+        }
+    }
+}
+
+wss.on('connection', (ws) => {
+    var client_id = ws._socket.remoteAddress + ":" + ws._socket.remotePort;
+    console.log('New connection: ' + client_id);
+    clients[client_id] = ws;
+    client_count++;
+
+    ws.on('message', (message) => {
+        console.log('Message from ' + client_id + ': ' + message);
+        var chat = {msg: 'text', data: message};
+        Broadcast(JSON.stringify(chat));
+        chats.push(message);
+    });
+    ws.on('close', () => {
+        console.log('Client disconnected: ' + client_id);
+        delete clients[client_id];
+        client_count--;
+        UpdateClientCount();
+    });
+
+    UpdateClientCount();
+});
+
+
+
+
+
+
+server.listen(port, () => {
 	console.log(`Example app listening on port ${port}!`)
 });
