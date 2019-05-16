@@ -16,7 +16,6 @@ const app = express()
 
 //WS
 const server = http.createServer(app);
-console.log(server);
 
 const port = 8019
 
@@ -30,11 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 
-//WS
-var wss = new WebSocket.Server({server: server});
-var clients = {};
-var client_count = 0;
-var chats = [];
+
 
 
 // set a cookie
@@ -365,6 +360,21 @@ app.get('/users/:nconst', (req, res) => {
 
 });
 
+
+//WS
+var wss = new WebSocket.Server({server: server});
+//Need for clientcount
+var clients = {};
+
+var client_count = 0;
+
+//Maintain chat rooms
+var rooms = {
+    //"default" : [],
+};
+
+
+
 ///WS functions
 function UpdateClientCount() {
     var message = {msg: 'client_count', data: client_count};
@@ -372,30 +382,92 @@ function UpdateClientCount() {
 }
 
 function Broadcast(message) {
-    var id;
-    for (id in clients) {
-        if (clients.hasOwnProperty(id)) {
-            clients[id].send(message);
+
+    parsedMsg = JSON.parse(message);
+
+    if( parsedMsg.msg == "client_count" ){
+        var id;
+        for (id in clients) {
+            if (clients.hasOwnProperty(id)) {
+                clients[id].send(message);
+            }
         }
     }
+    //Text message broadcast
+    else if ( parsedMsg.msg == "text" ){
+
+        console.log(rooms[parsedMsg.room]);
+        console.log(rooms[parsedMsg.room].length);
+        //console.log( Object.keys(clients) );
+
+        //for (var id in rooms[parsedMsg.room]) {
+        for (var x = 0; x < rooms[parsedMsg.room].length ; x++){
+
+            cur = rooms[parsedMsg.room][x];
+
+            if (clients.hasOwnProperty(cur)) {
+                console.log("sending to "+cur);
+                clients[cur].send(message);
+            }
+        }
+    }
+
+
 }
 
 wss.on('connection', (ws) => {
     var client_id = ws._socket.remoteAddress + ":" + ws._socket.remotePort;
     console.log('New connection: ' + client_id);
+
     clients[client_id] = ws;
     client_count++;
 
     ws.on('message', (message) => {
-        console.log('Message from ' + client_id + ': ' + message);
-        var chat = {msg: 'text', data: message};
-        Broadcast(JSON.stringify(chat));
-        chats.push(message);
+        parsedMessage = JSON.parse(message);
+        console.log('Message from ' + client_id + ': ' + JSON.stringify(parsedMessage) );
+
+        console.log(parsedMessage);
+
+        //Server update
+        if( parsedMessage.msg == "roomUpdate" ){
+            curRoom = parsedMessage.room;
+
+            //Check if room exits, if not create
+            if( !rooms[curRoom] ){
+                rooms[curRoom] = [];
+            }
+
+            //Make sure not duplicate
+            if( !rooms[curRoom].includes(client_id) ){
+                rooms[curRoom].push(client_id);
+            }
+
+            console.log(rooms);
+        }
+        //Receiving a message to broadcast
+        else if( parsedMessage.msg == "text" ){
+            var chat = {msg: 'text' ,data: parsedMessage.data, room: parsedMessage.room };
+            Broadcast(JSON.stringify(chat));
+        }
     });
+
     ws.on('close', () => {
         console.log('Client disconnected: ' + client_id);
         delete clients[client_id];
         client_count--;
+
+        //Remove from all rooms
+        for( var key in rooms ){
+            for( var i =0; i < rooms[key].length; i++ ){
+                if( client_id == rooms[key][i] ){
+                    delete rooms[key][i];
+                }
+            }
+        }
+
+        console.log("New rooms: " + JSON.stringify(rooms));
+
+
         UpdateClientCount();
     });
 

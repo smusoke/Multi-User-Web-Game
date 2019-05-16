@@ -29,7 +29,7 @@
 
 <body style="background-color:#EEE;" onload="Init(); wsInit();">
 
-	<div id="app">
+	<div id="wsApp">
 
 		<div class="nav section">
 			<div class="container" >  
@@ -44,12 +44,16 @@
 		</div>
 
 
+		<div id="main">
+
+
 		<div class="join room section" style="margin-top: 3px;">
 			<div class="container">  
 
-				<input type="text" name="joinRoom" placeholder="Chat room name">
+				<input type="text" name="joinRoom" id="chatRoomInput" placeholder="Chat room name" value="">
 				
-				<button class="two columns">Join</button>
+				<button class="two columns" @click="updateRoom">Join</button>
+				<h4 class="u-pull-right">Chatroom: {{clientGroup}}</h3>
 			</div>
 		</div>
 
@@ -57,30 +61,16 @@
 			<div class="container">  
 				<div id="chatContainer" style="margin-top: 4px;">
 					<h5 style="text-align: center;"><b>Chat</b></h5>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
-					<h6><b>Joe:</b> Example message</h6>
+					<!-- <h6><b>Joe:</b> Example message</h6> -->
+					<h6 v-for="message in chat_messages"><b>{{message[0]}}:</b> {{message[1]}}</h6>
 				</div>
 
 				<label>Message</label>
-				<textarea class="eight columns" placeholder="Hey there" id="exampleMessage"></textarea>
-				<button class="two columns">Send</button>
+				<textarea class="eight columns" placeholder="Hey there" v-model="new_message" id="exampleMessage"></textarea>
+				<button class="two columns" @click="sendMessage">Send</button>
 			</div>
+		</div>
+
 		</div>
 
 

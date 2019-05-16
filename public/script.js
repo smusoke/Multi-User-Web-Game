@@ -46,7 +46,7 @@ function Init() {
 
 
 //Check for login
-var cookieCheck = setInterval(() => {
+var cookieCheck = setInterval( () => {
 		var decodedCookie = getCookie("cookieName");
 		//console.log("Cookie is: " + decodedCookie);
 
@@ -240,6 +240,7 @@ function getUsername(){
 	return app.username;
 }
 
+
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -255,6 +256,8 @@ function getCookie(cname) {
   }
   return "";
 }
+
+
 
 function logout(){
 
