@@ -8,10 +8,11 @@ function wsInit() {
             username: "New User " + Math.floor(Math.random() * 100) + 1  ,
             clientGroup: "",
             client_count: 0,
+            messages_length: 0,
             new_message: "",
-            chat_messages:{
-                "Bobby":"Hey dude"
-            },
+            chat_messages:[
+                //["Bobby","Whats good"],
+            ],
         }
     });
 
@@ -24,23 +25,37 @@ function wsInit() {
     };
 
     ws.onmessage = (event) => {
-        console.log("event data: " + event.data);
+        //console.log("event data: " + event.data);
         var message = JSON.parse(event.data);
 
         //Message so add it to the model
         if (message.msg === "text") {
+            //List of lists that have each index correspodnto certain
 
             //wsApp.chat_messages.push(message.data);
             parsedData = JSON.parse(message.data)
-            console.log(parsedData[0]);
-            //wsApp.chat_messages[]
-            console.log(message.data)
+            wsApp.chat_messages.push(parsedData);
         }
 
         else if (message.msg === "historical") {
             wsApp.chat_messages = message.data;
         }
     };
+
+    //Scrol chat
+    var scrollDown = setInterval(() => {
+        //console.log("Curnume is " +wsApp.messages_length);
+        //console.log("actual is " +wsApp.chat_messages.length);
+
+        if( wsApp.messages_length < wsApp.chat_messages.length){
+            var chatC = document.getElementById("chatContainer");
+            chatC.scrollTop = chatC.scrollHeight;
+
+            wsApp.messages_length = wsApp.chat_messages.length;
+
+        }
+
+        },250) ;
 }
 
 
@@ -61,6 +76,11 @@ var cookieChec = setInterval(() => {
         }
 
     },500) ;
+
+
+
+
+
 
 
 function getUser(id) {
@@ -138,7 +158,9 @@ function sendMessage() {
     }
     else{
         //Send message with room
-        msgJson = {"msg":"text", "data":wsApp.new_message, "room":wsApp.clientGroup};
+        msg = [wsApp.username,wsApp.new_message];
+
+        msgJson = {"msg":"text", "data":JSON.stringify(msg), "room":wsApp.clientGroup};
         ws.send(JSON.stringify(msgJson));
     }
 }

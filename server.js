@@ -419,11 +419,6 @@ wss.on('connection', (ws) => {
     var client_id = ws._socket.remoteAddress + ":" + ws._socket.remotePort;
     console.log('New connection: ' + client_id);
 
-    //New
-    //rooms['default'].push(client_id)
-    //console.log(ws);
-
-    //Old
     clients[client_id] = ws;
     client_count++;
 
@@ -442,7 +437,10 @@ wss.on('connection', (ws) => {
                 rooms[curRoom] = [];
             }
 
-            rooms[curRoom].push(client_id);
+            //Make sure not duplicate
+            if( !rooms[curRoom].includes(client_id) ){
+                rooms[curRoom].push(client_id);
+            }
 
             console.log(rooms);
         }

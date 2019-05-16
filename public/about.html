@@ -1,12 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>About the Project</title>
-<link rel="stylesheet" href="css/normalize.css">
+	<title>About the Project</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript" src="script.js" async=""></script>
+	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/skeleton.css">
 	<link rel="stylesheet" href="css/style.css">
 
+	<style type="text/css">
+		#person1{
+		width: auto;
+		}
+		#person1 p {
+		border: 1px solid #666;
+		width: 400px;
+		}
+
+
+		h1{
+		text-align: center;
+		}
+
+
+
+
+
+		}
+
+
+
+		ul {
+		list-style-type: square;
+		text-align: center;
+		list-style-position: inside;
+
+		}
+
+	</style>
 </head>
+
+
+
 <body style="background-color:#EEE;" onload="Init()">
 
 	<div class="nav section">
@@ -21,37 +58,9 @@
 		</div>
 	</div>
 
-	<style type="text/css">
-		#person1{
-			width: auto;
-		}
-		 #person1 p {
-			border: 1px solid #666;
-			width: 400px;
-		}
-
-		
-		h1{
-			text-align: center;
-		}
-		
-		
+	<div id="main">
 
 
-	
-}
-
-
-
-ul {
-  list-style-type: square;
-  text-align: center;
-  list-style-position: inside;
-
-}
-		
-
-	</style>
 	<div class="container">
 		
 		<div id="description">
@@ -75,5 +84,16 @@ ul {
 		<ul>
 			<li></li>
 		</ul>
+
+	</div> <!--End div for id=main, need in order to show game -->
+
+
+	<div class="footer section">
+		<div class="container" >  
+		 <footer id="nav" style="padding-left:2%; text-align: center">
+			<p style="color:white; padding-top: 8px;">Tom Evaders</p>
+		</footer>
+		</div>
+	</div>
 </body>
 </html>
