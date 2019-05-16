@@ -1,10 +1,11 @@
-var app;
+var wsApp;
 var ws;
 
 function wsInit() {
-    app = new Vue({
-        el: "#app",
+    wsApp = new Vue({
+        el: "#wsApp",
         data: {
+            clientGroup: "default",
             client_count: 0,
             new_message: "",
             chat_messages: []
@@ -20,22 +21,22 @@ function wsInit() {
     };
 
     ws.onmessage = (event) => {
-        console.log(event.data);
+        console.log("even data: " + event.data);
         var message = JSON.parse(event.data);
         if (message.msg === "client_count") {
-            app.client_count = message.data;
+            wsApp.client_count = message.data;
         }
         else if (message.msg === "text") {
-            app.chat_messages.push(message.data);
+            wsApp.chat_messages.push(message.data);
         }
         else if (message.msg === "historical") {
-            app.chat_messages = message.data;
+            wsApp.chat_messages = message.data;
         }
     };
 }
 
 
-function SendMessage() {
-    ws.send(app.new_message);
+function sendMessage() {
+    ws.send(wsApp.new_message);
 }
 

@@ -29,7 +29,7 @@
 
 <body style="background-color:#EEE;" onload="Init(); wsInit();">
 
-	<div id="app">
+	<div id="wsApp">
 
 		<div class="nav section">
 			<div class="container" >  
@@ -78,8 +78,8 @@
 				</div>
 
 				<label>Message</label>
-				<textarea class="eight columns" placeholder="Hey there" id="exampleMessage"></textarea>
-				<button class="two columns">Send</button>
+				<textarea class="eight columns" placeholder="Hey there" v-model="new_message" id="exampleMessage"></textarea>
+				<button class="two columns" @click="sendMessage">Send</button>
 			</div>
 		</div>
 
