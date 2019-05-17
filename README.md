@@ -5,4 +5,4 @@ Setup:\
 Create directory\
 cd to directory\
 npm install to get all dependencies\
-run: node server.js\
+run: node server.js
