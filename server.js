@@ -143,7 +143,13 @@ app.post('/sendscore', (req, res) => {
             console.log(err);
         }
         else {
-            var oldScore = parseInt( rows[0]['score'] );
+            if( rows.length > 0 ){
+                var oldScore = parseInt( rows[0]['score'] );
+            }
+            else{
+                var oldScore = 0;
+            }
+
             var newScore = parseInt( req.body.score );
 
             //Update info
